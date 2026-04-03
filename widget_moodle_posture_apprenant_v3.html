@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Posture de l'apprenant — Séance 2</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f5f5f3;color:#2C2C2A;padding:1rem}
+.container{max-width:720px;margin:0 auto;background:#fff;border-radius:12px;padding:1.5rem;border:1px solid #e0e0d8}
+.nav{display:flex;gap:6px;margin-bottom:1.25rem}
+.nbtn{flex:1;padding:9px 6px;border:1px solid #ccc;border-radius:8px;background:#f5f5f3;color:#888;font-size:13px;cursor:pointer;transition:all .2s;text-align:center;font-family:Arial,sans-serif}
+.nbtn.active{background:#fff;border-color:#1D9E75;color:#085041;font-weight:bold}
+.nbtn.done{background:#E1F5EE;color:#085041;border-color:#1D9E75}
+.pbar{height:4px;background:#e0e0d8;border-radius:2px;margin-bottom:1.5rem}
+.pfill{height:100%;background:#1D9E75;border-radius:2px;transition:width .4s}
+.sec{display:none}.sec.on{display:block}
+.intro{font-size:13px;color:#888;margin-bottom:1.25rem;line-height:1.6}
+.qcard{background:#fff;border:1px solid #e0e0d8;border-radius:10px;padding:1rem 1.25rem;margin-bottom:.75rem}
+.qnum{font-size:11px;color:#aaa;margin-bottom:4px}
+.qtxt{font-size:14px;color:#2C2C2A;margin-bottom:.75rem;line-height:1.5;font-weight:bold}
+.opt{display:flex;align-items:flex-start;gap:10px;padding:9px 12px;border:1px solid #e0e0d8;border-radius:8px;margin-bottom:6px;cursor:pointer;background:#f9f9f7;transition:all .15s}
+.opt:hover{border-color:#1D9E75;background:#f0faf6}
+.opt.sel{border-color:#1D9E75;background:#E1F5EE}
+.oltr{width:24px;height:24px;border-radius:50%;background:#e0e0d8;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:bold;flex-shrink:0;color:#5F5E5A}
+.otxt{font-size:13px;color:#2C2C2A;line-height:1.4;padding-top:3px}
+.btn{padding:10px 18px;border:1px solid #ccc;border-radius:8px;background:#fff;color:#2C2C2A;font-size:13px;cursor:pointer;transition:all .2s;font-family:Arial,sans-serif}
+.btn:hover{background:#f5f5f3}
+.btnp{background:#1D9E75;border-color:#1D9E75;color:#fff;font-weight:bold}
+.btnp:hover{background:#0F6E56}
+.res-box{display:none;margin-top:1.5rem;padding:1.25rem;border-radius:10px;border:1px solid #1D9E75;background:#E1F5EE;text-align:center}
+.score-ring{width:72px;height:72px;border-radius:50%;border:3px solid #1D9E75;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 1rem}
+.snum{font-size:22px;font-weight:bold;color:#1D9E75}
+.slbl{font-size:11px;color:#0F6E56}
+.badge{display:inline-block;padding:4px 14px;border-radius:20px;font-size:12px;font-weight:bold;background:#1D9E75;color:#fff;margin-bottom:.75rem}
+.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:1rem 0}
+.pcard{padding:.875rem;border-radius:10px;border:1px solid #e0e0d8;background:#fff}
+.pcard.ideal{border-color:#1D9E75;border-width:2px}
+.pname{font-size:13px;font-weight:bold;color:#2C2C2A;margin-bottom:4px}
+.pdesc{font-size:12px;color:#888;line-height:1.4}
+.ptag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:6px;margin-top:6px;font-weight:bold}
+.tok{background:#E1F5EE;color:#085041}
+.tko{background:#FAEEDA;color:#854F0B}
+.tbest{background:#E6F1FB;color:#185FA5}
+.info-box{padding:1rem 1.25rem;border-radius:10px;border:1px solid #e0e0d8;background:#f9f9f7;margin:1rem 0;font-size:13px;color:#2C2C2A;line-height:1.6}
+@media(max-width:500px){
+  .pgrid{grid-template-columns:repeat(2,1fr)}
+  .nav .nbtn{font-size:11px;padding:8px 4px}
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="nav">
+  <div class="nbtn active" id="nb0" onclick="goSec(0)">1 — Quiz de positionnement</div>
+  <div class="nbtn" id="nb1" onclick="goSec(1)">2 — Les postures</div>
+</div>
+<div class="pbar"><div class="pfill" id="pf" style="width:50%"></div></div>
+
+<!-- SECTION 1 : QUIZ -->
+<div class="sec on" id="s0">
+  <p class="intro">Lisez chaque situation et choisissez la réponse qui vous ressemble le plus. Il n'y a pas de bonne ou mauvaise réponse !</p>
+
+  <div class="qcard">
+    <div class="qnum">Question 1 / 5</div>
+    <div class="qtxt">Quand je suis en formation sur un sujet qui ne me semble pas utile, j'ai tendance à...</div>
+    <div class="opt" onclick="pick(this,0,'A')"><div class="oltr">A</div><div class="otxt">Décrocher et attendre la fin</div></div>
+    <div class="opt" onclick="pick(this,0,'B')"><div class="oltr">B</div><div class="otxt">Chercher le lien avec mon projet d'insertion</div></div>
+    <div class="opt" onclick="pick(this,0,'C')"><div class="oltr">C</div><div class="otxt">Le dire ouvertement et critiquer</div></div>
+    <div class="opt" onclick="pick(this,0,'D')"><div class="oltr">D</div><div class="otxt">M'impliquer quand même pour progresser</div></div>
+  </div>
+
+  <div class="qcard">
+    <div class="qnum">Question 2 / 5</div>
+    <div class="qtxt">Quand le formateur pose une question au groupe, je...</div>
+    <div class="opt" onclick="pick(this,1,'A')"><div class="oltr">A</div><div class="otxt">Attends que quelqu'un d'autre réponde</div></div>
+    <div class="opt" onclick="pick(this,1,'B')"><div class="oltr">B</div><div class="otxt">Essaie de répondre même si je ne suis pas sûr(e)</div></div>
+    <div class="opt" onclick="pick(this,1,'C')"><div class="oltr">C</div><div class="otxt">Pose une autre question pour approfondir</div></div>
+    <div class="opt" onclick="pick(this,1,'D')"><div class="oltr">D</div><div class="otxt">Aide mes voisins à trouver la réponse</div></div>
+  </div>
+
+  <div class="qcard">
+    <div class="qnum">Question 3 / 5</div>
+    <div class="qtxt">Face à un travail de groupe, mon attitude est...</div>
+    <div class="opt" onclick="pick(this,2,'A')"><div class="oltr">A</div><div class="otxt">Je laisse les autres prendre les initiatives</div></div>
+    <div class="opt" onclick="pick(this,2,'B')"><div class="oltr">B</div><div class="otxt">Je participe et propose des idées</div></div>
+    <div class="opt" onclick="pick(this,2,'C')"><div class="oltr">C</div><div class="otxt">Je soutiens et encourage mes collègues</div></div>
+    <div class="opt" onclick="pick(this,2,'D')"><div class="oltr">D</div><div class="otxt">Je remets en question l'utilité de l'activité</div></div>
+  </div>
+
+  <div class="qcard">
+    <div class="qnum">Question 4 / 5</div>
+    <div class="qtxt">Quand je ne comprends pas quelque chose, je...</div>
+    <div class="opt" onclick="pick(this,3,'A')"><div class="oltr">A</div><div class="otxt">Fais semblant de comprendre pour ne pas déranger</div></div>
+    <div class="opt" onclick="pick(this,3,'B')"><div class="oltr">B</div><div class="otxt">Lève la main et demande une explication</div></div>
+    <div class="opt" onclick="pick(this,3,'C')"><div class="oltr">C</div><div class="otxt">Demande à un collègue après la séance</div></div>
+    <div class="opt" onclick="pick(this,3,'D')"><div class="oltr">D</div><div class="otxt">Cherche par moi-même dans mes notes</div></div>
+  </div>
+
+  <div class="qcard">
+    <div class="qnum">Question 5 / 5</div>
+    <div class="qtxt">En fin de séance, je...</div>
+    <div class="opt" onclick="pick(this,4,'A')"><div class="oltr">A</div><div class="otxt">Ne sais pas trop si j'ai atteint les objectifs</div></div>
+    <div class="opt" onclick="pick(this,4,'B')"><div class="oltr">B</div><div class="otxt">Fais le point sur ce que j'ai appris et ce qu'il me reste à travailler</div></div>
+    <div class="opt" onclick="pick(this,4,'C')"><div class="oltr">C</div><div class="otxt">Partage ce que j'ai retenu avec le groupe</div></div>
+    <div class="opt" onclick="pick(this,4,'D')"><div class="oltr">D</div><div class="otxt">Attends le résultat sans me poser la question</div></div>
+  </div>
+
+  <div style="display:flex;justify-content:flex-end;margin-top:1rem">
+    <button class="btn btnp" onclick="showRes()">Voir mon profil →</button>
+  </div>
+
+  <div class="res-box" id="rbox">
+    <div class="score-ring"><span class="snum" id="sv">0</span><span class="slbl">/ 5</span></div>
+    <p style="font-size:13px;color:#085041;margin-bottom:.75rem" id="rtxt"></p>
+    <div style="margin-bottom:1rem"><span class="badge" id="rbadge"></span></div>
+    <button class="btn btnp" onclick="goSec(1)">Découvrir les 6 postures →</button>
+  </div>
+</div>
+
+<!-- SECTION 2 : FICHE POSTURES -->
+<div class="sec" id="s1">
+  <p class="intro">Il existe 6 postures d'apprenant. Certaines freinent votre progression, d'autres la favorisent. Identifiez la vôtre et visez la posture idéale !</p>
+
+  <div class="pgrid">
+    <div class="pcard">
+      <div class="pname">Passivité</div>
+      <div class="pdesc">Subit la formation, n'interagit pas, attend que ça passe</div>
+      <span class="ptag tko">Freine</span>
+    </div>
+    <div class="pcard">
+      <div class="pname">Résistance</div>
+      <div class="pdesc">Critique, s'oppose sans construire</div>
+      <span class="ptag tko">Freine</span>
+    </div>
+    <div class="pcard">
+      <div class="pname">Réceptivité</div>
+      <div class="pdesc">Écoute, prend des notes, pose des questions</div>
+      <span class="ptag tok">Favorable</span>
+    </div>
+    <div class="pcard">
+      <div class="pname">Questionnement</div>
+      <div class="pdesc">Cherche à comprendre, relie au vécu</div>
+      <span class="ptag tok">Favorable</span>
+    </div>
+    <div class="pcard ideal">
+      <div class="pname">Implication</div>
+      <div class="pdesc">Acteur de son apprentissage, expérimente, prend des initiatives</div>
+      <span class="ptag tbest">Idéale ✓</span>
+    </div>
+    <div class="pcard ideal">
+      <div class="pname">Coopération</div>
+      <div class="pdesc">Partage, soutient ses pairs, co-construit</div>
+      <span class="ptag tbest">Idéale ✓</span>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <strong>La posture idéale en formation</strong><br><br>
+    Un apprenant engagé est <strong>acteur</strong> de sa formation. Il questionne, expérimente, partage et relie les apprentissages à sa situation réelle d'insertion. Sa posture évolue au fil de la séance, et c'est tout à fait normal.
+  </div>
+
+  <div style="display:flex;justify-content:space-between;margin-top:1rem">
+    <button class="btn" onclick="goSec(0)">← Retour au quiz</button>
+  </div>
+</div>
+
+</div>
+
+<script>
+const ans={0:null,1:null,2:null,3:null,4:null};
+const good={0:'B',1:'B',2:'B',3:'B',4:'B'};
+const profiles=[
+  {label:'Passivité',msg:'Prenez conscience de votre posture et osez vous engager davantage. Chaque effort compte !'},
+  {label:'Réceptivité',msg:'Bonne base ! Vous écoutez bien — osez participer plus activement.'},
+  {label:'Questionnement',msg:'Vous cherchez à comprendre — excellente posture ! Reliez les apprentissages à votre vécu.'},
+  {label:'Implication',msg:'Vous êtes dans une posture active et engagée. Continuez sur cette lancée !'},
+  {label:'Coopération',msg:'Excellent ! Vous êtes pleinement acteur(rice) de votre formation et de celle des autres.'}
+];
+
+function pick(el,q,l){
+  el.closest('.qcard').querySelectorAll('.opt').forEach(o=>o.classList.remove('sel'));
+  el.classList.add('sel');
+  ans[q]=l;
+}
+
+function showRes(){
+  let sc=0;
+  for(let i=0;i<5;i++){if(ans[i]===good[i])sc++;}
+  document.getElementById('sv').textContent=sc;
+  const p=profiles[Math.min(sc,4)];
+  document.getElementById('rtxt').textContent=p.msg;
+  document.getElementById('rbadge').textContent=p.label;
+  const rb=document.getElementById('rbox');
+  rb.style.display='block';
+  rb.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+function goSec(n){
+  document.querySelectorAll('.sec').forEach((s,i)=>s.classList.toggle('on',i===n));
+  document.querySelectorAll('.nbtn').forEach((b,i)=>{
+    b.classList.remove('active','done');
+    if(i===n)b.classList.add('active');
+    if(i<n)b.classList.add('done');
+  });
+  document.getElementById('pf').style.width=[50,100][n]+'%';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>
